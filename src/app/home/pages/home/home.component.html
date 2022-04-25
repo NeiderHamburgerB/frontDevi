@@ -1,0 +1,71 @@
+<div class="container">
+    <div class="row ">
+        <div class="col-8">
+            <h1 class="text-center mt-5">Menú</h1>
+
+        <table class="table mt-5">
+            <thead>
+              <tr>
+                <td>Nombre</td>
+                <td>precio</td>
+                <td>ingredientes</td>
+                <td>Acciones</td>
+             </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let i of menu">
+                <th scope="row">{{i.name}}</th>
+                <th scope="row">{{i.price}}</th>
+                <th scope="row">{{i.ingredients}}</th>
+                <th scope="row"><button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editar">Editar</button><button class="btn btn-outline-danger mll" >Eliminar</button>
+                </th>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-4">
+            <button class="btn btn-outline-primary mt-5" data-bs-toggle="modal" data-bs-target="#crear">Crear</button>
+        </div>
+        
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="crear">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Crear</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="menuForm" (ngSubmit)="crear()" >
+                <input type="text" placeholder="name" formControlName="name" class="form-control">
+                <input type="text" placeholder="price" formControlName="price" class="form-control">
+                <input type="text" placeholder="ingredients" formControlName="ingredients" class="form-control">
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" (click)="crear()" >Crear</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" tabindex="-1" id="editar">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Actualizar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>lorem lorem</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Crear</button>
+        </div>
+      </div>
+    </div>
+  </div>
