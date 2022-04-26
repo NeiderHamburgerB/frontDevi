@@ -1,71 +1,216 @@
 <div class="container">
-    <div class="row ">
-        <div class="col-8">
-            <h1 class="text-center mt-5">Menú</h1>
+  <div class="row">
+    <div class="col-8">
+      <h1 class="text-center mt-5">Menú</h1>
 
-        <table class="table mt-5">
-            <thead>
-              <tr>
-                <td>Nombre</td>
-                <td>precio</td>
-                <td>ingredientes</td>
-                <td>Acciones</td>
-             </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let i of menu">
-                <th scope="row">{{i.name}}</th>
-                <th scope="row">{{i.price}}</th>
-                <th scope="row">{{i.ingredients}}</th>
-                <th scope="row"><button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#editar">Editar</button><button class="btn btn-outline-danger mll" >Eliminar</button>
-                </th>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-4">
-            <button class="btn btn-outline-primary mt-5" data-bs-toggle="modal" data-bs-target="#crear">Crear</button>
-        </div>
-        
+      <table class="table mt-5" *ngIf="menu.length > 0">
+        <thead>
+          <tr>
+            <td>Nombre</td>
+            <td>Precio</td>
+            <td>Ingredientes</td>
+            <td>Acciones</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let i of menu">
+            <th scope="row">{{ i.name }}</th>
+            <th scope="row">{{ i.price }}</th>
+            <th scope="row">{{ i.ingredients }}</th>
+            <th scope="row">
+              <button
+                class="btn btn-outline-warning"
+                data-bs-toggle="modal"
+                data-bs-target="#editar"
+                (click)="editar(i)"
+              >
+                Editar</button
+              ><button
+                class="btn btn-outline-danger mll"
+                (click)="deleteP(i._id)"
+              >
+                Eliminar
+              </button>
+            </th>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <div class="col-4">
+      <button
+        class="btn btn-outline-primary mt-5"
+        data-bs-toggle="modal"
+        data-bs-target="#crear"
+      >
+        Crear plato
+      </button>
+    </div>
+  </div>
 </div>
 
 <div class="modal" tabindex="-1" id="crear">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Crear</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <form [formGroup]="menuForm" (ngSubmit)="crear()" >
-                <input type="text" placeholder="name" formControlName="name" class="form-control">
-                <input type="text" placeholder="price" formControlName="price" class="form-control">
-                <input type="text" placeholder="ingredients" formControlName="ingredients" class="form-control">
-            </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" (click)="crear()" >Crear</button>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Crear</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
-    </div>
-  </div>
+      <div class="modal-body">
+        <form autocomplete="off" [formGroup]="menuForm" (ngSubmit)="create()">
+          <input
+            type="text"
+            placeholder="name"
+            formControlName="name"
+            class="form-control p-2"
+          />
 
-  <div class="modal" tabindex="-1" id="editar">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Actualizar</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <p>lorem lorem</p>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Crear</button>
-        </div>
+          <input
+            type="text"
+            placeholder="price"
+            formControlName="price"
+            class="form-control p-2 mt-1"
+          />
+
+          <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">Ingredientes</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <input
+                  class="form-control mt-1"
+                  [formControl]="newIngredient"
+                  placeholder="Agregar ingrediente"
+                  (keyup.enter)="aggIngredients()"
+                />
+
+                <button class="btn" type="button" (click)="aggIngredients()">
+                  Agregar
+                </button>
+              </div>
+              <div
+                class="input-group"
+                *ngFor="
+                  let ingredient of ingredientsArray.controls;
+                  let i = index
+                "
+              >
+                <input
+                  class="form-control mt-1"
+                  [formControlName]="i"
+                  value="{{ ingredient.value }}"
+                />
+
+                <button class="btn" type="button" (click)="deleteI(i)">
+                  Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cerrar
+        </button>
+        <button
+          type="button"
+          data-bs-dismiss="modal"
+          class="btn btn-primary"
+          (click)="create()"
+        >
+          Crear
+        </button>
       </div>
     </div>
   </div>
+</div>
+
+<div class="modal" tabindex="-1" #closeM id="editar">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Actualizar</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form autocomplete="off" [formGroup]="menuForm" (ngSubmit)="update()">
+          <input
+            type="text"
+            placeholder="name"
+            formControlName="name"
+            class="form-control p-2"
+            value="{{ updateData?.name }}"
+          />
+
+          <input
+            type="text"
+            placeholder="price"
+            formControlName="price"
+            class="form-control p-2 mt-1"
+            value="{{ updateData?.price }}"
+          />
+
+          <div class="mb-3 row">
+            <label class="col-sm-3 col-form-label">Ingredientes</label>
+            <div class="col-sm-9">
+              <div class="input-group">
+                <input
+                  class="form-control mt-1"
+                  [formControl]="newIngredient"
+                  placeholder="Agregar ingrediente"
+                  (keyup.enter)="aggIngredients()"
+                />
+
+                <button class="btn" type="button" (click)="aggIngredients()">
+                  Agregar
+                </button>
+              </div>
+              <div
+                class="input-group"
+                *ngFor="
+                  let ingredient of ingredientsArray.controls;
+                  let i = index
+                "
+              >
+                <input
+                  class="form-control mt-1"
+                  [formControlName]="i"
+                  value="{{ ingredient.value }}"
+                />
+
+                <button class="btn" type="button" (click)="deleteI(i)">
+                  Eliminar
+                </button>
+              </div>
+              <div
+                class="input-group"
+                *ngFor="let ingredient of updateData?.ingredients; let i = index"
+              >
+                <input
+                readonly
+                  class="form-control mt-1"
+                  value="{{ ingredient }}"
+                />
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="button" data-bs-dismiss="modal" class="btn btn-primary" (click)="update()">Actualizar</button>
+      </div>
+    </div>
+  </div>
+</div>

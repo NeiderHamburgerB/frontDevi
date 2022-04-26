@@ -4,7 +4,10 @@
 
 export const environment = {
   production: true,
-  all: 'http://localhost:3000/menu/all'
+  all: 'http://localhost:3000/menu/all',
+  create:'http://localhost:3000/menu/create',
+  delete:'http://localhost:3000/menu/delete',
+  update:'http://localhost:3000/menu/update'
 };
 
 /*
